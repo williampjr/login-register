@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { InputField } from "../components/InputField";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -18,16 +18,40 @@ export function Login() {
     handleSubmit,
     register,
     formState: { errors },
-    reset,
   } = useForm({
     defaultValues: { email: "", password: "" },
     resolver: yupResolver(schema),
   });
 
+  const [message, setMessage] = useState("");
+
+  const navegation = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.message) {
+      setMessage(location.state.message);
+    }
+  }, [location]);
+
   const onSubmit = (data) => {
-    console.log(data);
-    alert("Sign in successfully");
-    reset();
+    // Recuperar usuários salvols de localStorage
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+
+    // Verificar se o email já foi registrado
+    const exists = users.find(
+      (user) => user.email === data.email && user.password === data.password,
+    );
+
+    if (exists) {
+      // Se já existe, então exibe mensagem de erro.
+      setMessage("");
+      alert("Sign in successfully");
+      navegation("/");
+      return;
+    } else {
+      navegation("/register", { state: { message: "Create an account." } });
+    }
   };
 
   return (
