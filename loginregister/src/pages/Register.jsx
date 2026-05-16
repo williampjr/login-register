@@ -1,26 +1,52 @@
 import React from "react";
 import { InputField } from "../components/InputField";
 import { Link } from "react-router";
+import { useForm } from "react-hook-form";
 
 export function Register() {
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    reset,
+  } = useForm({
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const onSubmit = (data) => {
+    console.log(data);
+    alert("Sign up successfully");
+    reset();
+  };
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
-      <form className="bg-white p-8 rounded-2xl shadow-md w-96">
+      <form
+        className="bg-white p-8 rounded-2xl shadow-md w-96"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <h2 className="text-2xl font-bold mb-6 text-center">Sign up</h2>
         <InputField
           label="Name"
-          id="name"
+          id="username"
           autoComplete="name"
           type="text"
           name="username"
-          register={() => {}}
+          register={register}
+          error={errors.name}
         />
         <InputField
           label="Email"
           id="email"
+          type="email"
           autoComplete="email"
           name="email"
-          register={() => {}}
+          register={register}
+          error={errors.email}
         />
         <InputField
           label="Password"
@@ -28,7 +54,8 @@ export function Register() {
           autoComplete="new-password"
           name="password"
           type="password"
-          register={() => {}}
+          register={register}
+          error={errors.password}
         />
         <InputField
           label="Confirm password"
@@ -36,7 +63,8 @@ export function Register() {
           autoComplete="new-password"
           name="confirmPassword"
           type="password"
-          register={() => {}}
+          register={register}
+          error={errors.confirmPassword}
         />
         <button
           type="submit"
