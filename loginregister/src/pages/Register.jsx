@@ -2,6 +2,21 @@ import React from "react";
 import { InputField } from "../components/InputField";
 import { Link } from "react-router";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schema = yup.object({
+  name: yup.string().required("Name is required."),
+  email: yup.string().email().required("Email is required."),
+  password: yup
+    .string()
+    .required("Password is required.")
+    .min(6, "Minimum 6 digits."),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Password is diferent.")
+    .required("Confirmation password is required."),
+});
 
 export function Register() {
   const {
@@ -11,11 +26,12 @@ export function Register() {
     reset,
   } = useForm({
     defaultValues: {
-      username: "",
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
     },
+    resolver: yupResolver(schema),
   });
 
   const onSubmit = (data) => {
@@ -32,10 +48,10 @@ export function Register() {
         <h2 className="text-2xl font-bold mb-6 text-center">Sign up</h2>
         <InputField
           label="Name"
-          id="username"
+          id="name"
           autoComplete="name"
           type="text"
-          name="username"
+          name="name"
           register={register}
           error={errors.name}
         />
