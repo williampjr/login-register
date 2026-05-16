@@ -1,18 +1,38 @@
 import React from "react";
 import { InputField } from "../components/InputField";
 import { Link } from "react-router";
+import { useForm } from "react-hook-form";
 
 export function Login() {
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    reset,
+  } = useForm({
+    defaultValues: { email: "", password: "" },
+  });
+
+  const onSubmit = (data) => {
+    console.log(data);
+    alert("Sign in successfully");
+    reset();
+  };
+
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
-      <form className="bg-white p-8 rounded-2xl shadow-md w-96">
+      <form
+        className="bg-white p-8 rounded-2xl shadow-md w-96"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
         <InputField
           label="Email"
           id="email"
           autoComplete="email"
           name="email"
-          register={() => {}}
+          register={register}
+          error={errors.email}
         />
         <InputField
           label="Password"
@@ -20,7 +40,8 @@ export function Login() {
           autoComplete="current-password"
           name="password"
           type="password"
-          register={() => {}}
+          register={register}
+          error={errors.password}
         />
         <button
           type="submit"
