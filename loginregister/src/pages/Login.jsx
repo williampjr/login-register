@@ -2,6 +2,16 @@ import React from "react";
 import { InputField } from "../components/InputField";
 import { Link } from "react-router";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schema = yup.object({
+  email: yup.string().email().required("Email is required."),
+  password: yup
+    .string()
+    .required("Password is required.")
+    .min(6, "Minimum 6 digits."),
+});
 
 export function Login() {
   const {
@@ -11,6 +21,7 @@ export function Login() {
     reset,
   } = useForm({
     defaultValues: { email: "", password: "" },
+    resolver: yupResolver(schema),
   });
 
   const onSubmit = (data) => {
