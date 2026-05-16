@@ -11,7 +11,8 @@ export function Register() {
           label="Name"
           id="name"
           autoComplete="name"
-          name="name"
+          type="text"
+          name="username"
           register={() => {}}
         />
         <InputField
@@ -24,16 +25,16 @@ export function Register() {
         <InputField
           label="Password"
           id="password"
-          autoComplete="password"
+          autoComplete="new-password"
           name="password"
           type="password"
           register={() => {}}
         />
         <InputField
           label="Confirm password"
-          id="password"
-          autoComplete="password"
-          name="password"
+          id="confirmPassword"
+          autoComplete="new-password"
+          name="confirmPassword"
           type="password"
           register={() => {}}
         />

@@ -10,7 +10,7 @@ export function InputField({
 }) {
   return (
     <div className="mb-4">
-      <label htmlFor={name} className="block mb-1 font_medium">
+      <label htmlFor={name} className="block mb-1 font-medium">
         {label}
       </label>
       <input

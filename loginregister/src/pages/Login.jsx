@@ -17,7 +17,7 @@ export function Login() {
         <InputField
           label="Password"
           id="password"
-          autoComplete="password"
+          autoComplete="current-password"
           name="password"
           type="password"
           register={() => {}}
