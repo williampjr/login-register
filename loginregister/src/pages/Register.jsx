@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { InputField } from "../components/InputField";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -34,10 +34,36 @@ export function Register() {
     resolver: yupResolver(schema),
   });
 
+  const [message, setMessage] = useState("");
+
+  const navegation = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.message) {
+      setMessage(location.state.message);
+    }
+  }, [location]);
+
   const onSubmit = (data) => {
-    console.log(data);
-    alert("Sign up successfully");
-    reset();
+    // Recuperar usuários salvols de localStorage
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    // Verificar se o email já foi registrado
+    const exists = users.find((user) => user.email === data.email);
+
+    if (exists) {
+      // Se já existe, então exibe mensagem de erro.
+      setMessage("Email already exists.");
+      return;
+    }
+    // Adicionar novo usuário
+    users.push({ name: data.name, email: data.email, password: data.password });
+
+    // Salvar lista atualizada em localStorage
+    localStorage.setItem("users", JSON.stringify(users));
+
+    // Redirecionar para login
+    navegation("/login");
   };
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
@@ -46,6 +72,9 @@ export function Register() {
         onSubmit={handleSubmit(onSubmit)}
       >
         <h2 className="text-2xl font-bold mb-6 text-center">Sign up</h2>
+
+        {message && <p className="text-red-500">{message}</p>}
+
         <InputField
           label="Name"
           id="name"
